@@ -1,0 +1,87 @@
+Tutorial Link https://www.youtube.com/watch?v=PMjp_VvfYJ0
+Link - 
+How to configure Ubuntu Linux server as a Domain Controller
+Samba 4 Active Directory Domain Controller on Ubuntu 20.10 Server
+How to install Active Directory on Ubuntu 20.10 LTS
+
+First, assign a static IP to your server. Ubuntu Server uses netplan for network management. Your network configuration will look similar to this:
+sudo ls /etc/netplan
+sudo vim /etc/netplan/ file name 
+
+sudo netplan apply
+
+Check if time synchronization with an Internet server is working
+timedatectl
+
+Update the apt cache
+sudo apt update
+
+Change the hostname and update the hosts file
+sudo vim /etc/hostname
+---
+dc1.aryan.com
+---
+sudo vim /etc/hosts
+---
+192.168.1.51 dc1.aryan.com dc1
+---
+sudo reboot
+
+
+Now, install the SAMBA 4 Active Directory packages
+sudo apt -y install samba krb5-config winbind smbclient
+---
+Kerberos Realm: aryan.com
+Kerberos servers for your realm: dc1.aryan.com
+Administrative server for your Kerberos realm: dc1.aryan.com
+
+Rename the SAMBA config file
+sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original
+
+Provision the domain controller
+sudo samba-tool domain provision
+---
+Realm [aryan.com]:
+Domain [MVCLOUD]:
+Server Role (dc, member, standalone) [dc]:
+DNS backend (SAMBA_INTERNAL, BIND9_FLATFILE, BIND9_DLZ, NONE) [SAMBA_INTERNAL]:
+DNS forwarder IP address (write 'none' to disable forwarding)  8.8.8.8
+Administrator password:
+Retype password:
+
+Copy the Kerberos config file
+sudo cp /var/lib/samba/private/krb5.conf /etc/
+
+Stop and disable the samba services and the dns resolver service
+sudo systemctl disable --now smbd nmbd winbind systemd-resolved
+
+Unmask the SAMBA AD service
+sudo systemctl unmask samba-ad-dc
+
+Enable and start the AD service
+sudo systemctl enable --now samba-ad-dc
+
+Show the functtional levels of the AD
+sudo samba-tool domain level show
+---
+Domain and forest function level for domain 'DC=mvcloud,DC=tech'
+
+Forest function level: (Windows) 2008 R2
+Domain function level: (Windows) 2008 R2
+Lowest function level of a DC: (Windows) 2008 R2
+Recreate the dns nameserver file
+
+sudo rm -f /etc/resolv.conf
+
+sudo vim /etc/resolv.conf
+---
+nameserver 127.0.0.1
+domain aryan.com
+
+Active Directory is now ready! Try joining a Windows 10 PC to your AD domain.
+
+You may use the samba-tool command to administer AD from the server itself. For example, this is how you create a user:
+
+sudo samba-tool user create user1
+
+Join a computer to the domain and login domain user
