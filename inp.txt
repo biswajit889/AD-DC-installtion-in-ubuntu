@@ -19,11 +19,11 @@ sudo apt update
 Change the hostname and update the hosts file
 sudo vim /etc/hostname
 ---
-dc1.aryan.com
+dc1.biswa.com
 ---
 sudo vim /etc/hosts
 ---
-192.168.1.51 dc1.aryan.com dc1
+192.168.1.51 dc1.biswa.com dc1
 ---
 sudo reboot
 
@@ -31,9 +31,9 @@ sudo reboot
 Now, install the SAMBA 4 Active Directory packages
 sudo apt -y install samba krb5-config winbind smbclient
 ---
-Kerberos Realm: aryan.com
-Kerberos servers for your realm: dc1.aryan.com
-Administrative server for your Kerberos realm: dc1.aryan.com
+Kerberos Realm: biswa.com
+Kerberos servers for your realm: dc1.biswa.com
+Administrative server for your Kerberos realm: dc1.biswa.com
 
 Rename the SAMBA config file
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original
@@ -41,7 +41,7 @@ sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original
 Provision the domain controller
 sudo samba-tool domain provision
 ---
-Realm [aryan.com]:
+Realm [biswa.com]:
 Domain [MVCLOUD]:
 Server Role (dc, member, standalone) [dc]:
 DNS backend (SAMBA_INTERNAL, BIND9_FLATFILE, BIND9_DLZ, NONE) [SAMBA_INTERNAL]:
