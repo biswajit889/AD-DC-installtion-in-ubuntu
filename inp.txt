@@ -1,4 +1,4 @@
-Tutorial Link https://www.youtube.com/watch?v=PMjp_VvfYJ0
+# Tutorial Link https://www.youtube.com/watch?v=PMjp_VvfYJ0
 Link - 
 How to configure Ubuntu Linux server as a Domain Controller
 Samba 4 Active Directory Domain Controller on Ubuntu 20.10 Server
